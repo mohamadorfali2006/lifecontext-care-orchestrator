@@ -14,19 +14,33 @@ import { EquityDashboardView } from './equity/EquityDashboardView';
 import { SdohDomain } from './standards/gravity-sdoh';
 import { HsdsService } from './standards/hsds';
 import { FhirClient, PUBLIC_FHIR_SERVERS } from './interop/fhir-client';
+import { LoginPage, AuthSession, UserRole } from './auth/LoginPage';
+import { LandingPage } from './landing/LandingPage';
+import { OnboardingModal } from './onboarding/OnboardingModal';
+import { LifeContextLogo } from './brand/LifeContextLogo';
 import { 
-  HeartHandshake, 
   Stethoscope, 
   Building2, 
   UserCheck, 
   Award, 
-  User,
-  Radio
+  User, 
+  LogOut 
 } from 'lucide-react';
 
 type ActiveView = 'clinician' | 'cbo' | 'patient' | 'equity';
+type PageMode = 'landing' | 'login' | 'workspace';
 
 export const App: React.FC = () => {
+  // Page mode state: 'landing' | 'login' | 'workspace'
+  const [pageMode, setPageMode] = useState<PageMode>('landing');
+  const [initialLoginRole, setInitialLoginRole] = useState<UserRole>('CLINICIAN');
+
+  // Authentication session state
+  const [session, setSession] = useState<AuthSession | null>(null);
+
+  // Onboarding tour state
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+
   // Current patient context
   const [selectedPatientIndex, setSelectedPatientIndex] = useState(0);
   const [isLiveFhir, setIsLiveFhir] = useState(false);
@@ -37,7 +51,7 @@ export const App: React.FC = () => {
     ? livePatientRecord 
     : SYNTHETIC_PATIENTS[selectedPatientIndex];
 
-  // Active view navigation
+  // Active view navigation inside workspace
   const [activeView, setActiveView] = useState<ActiveView>('clinician');
 
   // Multi-patient consent records
@@ -103,13 +117,46 @@ export const App: React.FC = () => {
   // Compute equity metrics
   const equityReport = DisparityMonitor.generateEquityReport(referrals, cohortMap);
 
+  // Handler: Login Success & Trigger Onboarding
+  const handleLoginSuccess = (newSession: AuthSession) => {
+    setSession(newSession);
+    setPageMode('workspace');
+
+    // Route directly to matching view
+    if (newSession.userRole === 'CBO_COORDINATOR') setActiveView('cbo');
+    else if (newSession.userRole === 'PATIENT') setActiveView('patient');
+    else if (newSession.userRole === 'AUDITOR') setActiveView('equity');
+    else setActiveView('clinician');
+
+    // Check if onboarding completed for this role
+    try {
+      const alreadyOnboarded = localStorage.getItem(`lifecontext_onboarding_${newSession.userRole}`);
+      if (!alreadyOnboarded) {
+        setIsOnboardingOpen(true);
+      }
+    } catch {
+      setIsOnboardingOpen(true);
+    }
+  };
+
+  const handleCloseOnboarding = () => {
+    if (session) {
+      try {
+        localStorage.setItem(`lifecontext_onboarding_${session.userRole}`, 'true');
+      } catch {
+        // LocalStorage fallback
+      }
+    }
+    setIsOnboardingOpen(false);
+  };
+
   // Handler: Clinician dispatches a referral
   const handleOrderReferral = (domain: SdohDomain, targetService: HsdsService) => {
     const consent = consentRecords[currentRecord.patient.id] || ConsentManager.createDefaultConsent(currentRecord.patient.id);
     
     // Check consent scope
     if (!ConsentManager.isDomainPermitted(consent, domain)) {
-      alert(`Patient consent for ${domain} has been revoked by patient. Referral blocked under HIPAA privacy rule.`);
+      alert(`Patient consent for ${domain} has been revoked by patient. Referral blocked under HIPAA / 42 CFR Part 2 privacy rule.`);
       return;
     }
 
@@ -191,43 +238,84 @@ export const App: React.FC = () => {
     }
   };
 
+  // View: Landing Page
+  if (pageMode === 'landing') {
+    return (
+      <LandingPage
+        onEnterApp={() => {
+          setPageMode('login');
+        }}
+        onLaunchRole={(role) => {
+          setInitialLoginRole(role);
+          setPageMode('login');
+        }}
+      />
+    );
+  }
+
+  // View: Authentication Gateway (Login Page)
+  if (pageMode === 'login' || !session) {
+    return (
+      <LoginPage
+        initialRole={initialLoginRole}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    );
+  }
+
+  // View: Main Care Orchestration Workspace
   return (
     <div className="app-shell">
-      {/* Top Universal Navbar */}
+      {/* Role-Tailored Onboarding Modal Tour */}
+      <OnboardingModal
+        userRole={session.userRole}
+        userName={session.userName}
+        isOpen={isOnboardingOpen}
+        onClose={handleCloseOnboarding}
+      />
+
+      {/* Top Universal Clean Navbar */}
       <nav className="app-navbar">
         <div className="nav-brand">
-          <div className="brand-badge">
-            <HeartHandshake size={24} />
-          </div>
-          <div>
-            <h1 className="brand-title">LifeContext Care Orchestrator</h1>
-            <p className="brand-tagline">Zero-Friction Clinical & Social Care Coordination</p>
-          </div>
+          <LifeContextLogo size={28} showTagline={false} />
         </div>
 
-        <div className="nav-controls">
-          {/* Server Connection Mode Indicator */}
-          <div className="server-mode-indicator">
-            <Radio size={14} color={isLiveFhir ? '#059669' : '#0284c7'} />
-            <span className="text-xs">
-              {isLiveFhir ? (
-                <button 
-                  className="btn-switch-server"
-                  onClick={() => setIsLiveFhir(false)}
-                  title="Click to return to local synthetic cohort"
-                >
-                  🟢 SMART Sandbox Live (Switch to Local)
-                </button>
-              ) : (
-                <span className="text-muted">Local Cohort Active</span>
-              )}
-            </span>
-          </div>
+        {/* Streamlined View Tabs */}
+        <div className="nav-tabs">
+          <button
+            className={`nav-tab ${activeView === 'clinician' ? 'active' : ''}`}
+            onClick={() => setActiveView('clinician')}
+          >
+            <Stethoscope size={15} />
+            <span>Clinician</span>
+          </button>
+          <button
+            className={`nav-tab ${activeView === 'cbo' ? 'active' : ''}`}
+            onClick={() => setActiveView('cbo')}
+          >
+            <Building2 size={15} />
+            <span>CBO Network</span>
+          </button>
+          <button
+            className={`nav-tab ${activeView === 'patient' ? 'active' : ''}`}
+            onClick={() => setActiveView('patient')}
+          >
+            <UserCheck size={15} />
+            <span>Patient Portal</span>
+          </button>
+          <button
+            className={`nav-tab ${activeView === 'equity' ? 'active' : ''}`}
+            onClick={() => setActiveView('equity')}
+          >
+            <Award size={15} />
+            <span>Equity</span>
+          </button>
+        </div>
 
-          {/* Patient Selector */}
+        {/* Right Controls: Patient & User */}
+        <div className="nav-controls">
           <div className="patient-switch-box">
-            <User size={15} color="#64748b" />
-            <span className="text-muted text-xs">Patient:</span>
+            <User size={14} color="#64748b" />
             <select
               className="patient-select"
               value={isLiveFhir ? 'live' : selectedPatientIndex}
@@ -239,45 +327,33 @@ export const App: React.FC = () => {
                   setSelectedPatientIndex(Number(e.target.value));
                 }
               }}
+              title="Select active patient context"
             >
               {SYNTHETIC_PATIENTS.map((p, idx) => (
                 <option key={p.patient.id} value={idx}>
-                  {p.patient.name[0]?.given?.[0]} {p.patient.name[0]?.family} ({p.patient.id})
+                  {p.patient.name[0]?.given?.[0]} {p.patient.name[0]?.family}
                 </option>
               ))}
               {livePatientRecord && (
                 <option value="live">
-                  ⭐ Amy Shaw ({livePatientRecord.patient.id} - Live SMART)
+                  Amy Shaw (Live SMART)
                 </option>
               )}
             </select>
           </div>
 
-          {/* Persona View Switcher Tabs */}
-          <div className="nav-tabs">
-            <button
-              className={`nav-tab ${activeView === 'clinician' ? 'active' : ''}`}
-              onClick={() => setActiveView('clinician')}
+          <div className="user-session-pill">
+            <div className="session-avatar">{session.userName.charAt(0)}</div>
+            <span className="session-name">{session.userName.split(' ')[0]}</span>
+            <button 
+              className="btn-signout"
+              onClick={() => {
+                setSession(null);
+                setPageMode('landing');
+              }}
+              title="Sign Out"
             >
-              <Stethoscope size={16} /> Clinician EHR
-            </button>
-            <button
-              className={`nav-tab ${activeView === 'cbo' ? 'active' : ''}`}
-              onClick={() => setActiveView('cbo')}
-            >
-              <Building2 size={16} /> CBO Partner Node
-            </button>
-            <button
-              className={`nav-tab ${activeView === 'patient' ? 'active' : ''}`}
-              onClick={() => setActiveView('patient')}
-            >
-              <UserCheck size={16} /> Patient & Caregiver PWA
-            </button>
-            <button
-              className={`nav-tab ${activeView === 'equity' ? 'active' : ''}`}
-              onClick={() => setActiveView('equity')}
-            >
-              <Award size={16} /> Equity Monitor
+              <LogOut size={14} />
             </button>
           </div>
         </div>
@@ -295,8 +371,6 @@ export const App: React.FC = () => {
             availableServices={CBO_SERVICE_DIRECTORY}
             activeReferrals={referrals}
             onOrderReferral={handleOrderReferral}
-            onOpenCboPortal={() => setActiveView('cbo')}
-            onOpenPatientPortal={() => setActiveView('patient')}
             fhirServerName="SMART Health IT R4 Sandbox"
             isLiveFhir={isLiveFhir}
             onSyncLiveFhir={handleSyncLiveFhir}

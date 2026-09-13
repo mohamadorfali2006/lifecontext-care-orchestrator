@@ -10,13 +10,16 @@
   - 21st Century Cures Act § 3060(a) Non-Device CDS Certification.
   - HIPAA and 42 CFR Part 2 behavioral health data redaction filter.
   - Granular patient/caregiver consent ledger with dynamic category revocation and simulated SMS fallback.
-- **Full Working Prototype Built & Verified:**
-  - Modern TypeScript/React application built at `C:\Users\PCD\.gemini\antigravity-ide\scratch\lifecontext-care-orchestrator`.
-  - 13 automated tests across 5 test suites passing with 100% success rate (`npm test`).
-  - Strict TypeScript check (`tsc --noEmit`) and linter (`oxlint`) completely clean with 0 warnings and 0 errors.
-  - Production bundle build green (`npm run build`).
-  - Live end-to-end simulated referral closure verified via `npx tsx scripts/verify.ts`.
-  - Git repository initialized and committed (`commit 6681038`).
+- **Live FHIR R4 Sandbox Client Added:**
+  - `src/interop/fhir-client.ts`: Queries public SMART Health IT sandbox endpoints with network error resilience and automatic fallback.
+  - Interactive "⚡ Test Live SMART Sandbox" trigger in the clinician header.
+- **Verification & DONE Bar Status:**
+  - 16 automated tests across 6 test suites passing (`npm test`).
+  - TypeScript check (`tsc --noEmit`) and linter (`oxlint`) 100% clean (0 errors, 0 warnings).
+  - Production build green (`npm run build`).
+  - Live E2E verification script (`scripts/verify.ts`) verified.
+  - Interactive browser verification recorded (`lifecontext_demo.webp` and `smart_sandbox_sync.webp`).
+  - Git Commits: `6681038` and `4e79816`.
 
 ## 2. Key Decisions & Rationale
 - **De-scoping Speculative AI:** Gated cross-population life-event forecasting and smart contracts to Phase 4 research; prioritized the deterministic rule engine and closed-loop CBO loop to avoid SaMD regulation and ensure instant clinical trust.
@@ -24,10 +27,10 @@
 - **Strict Separation of Concerns:** QA is tests-only (`tests/*`), CEO is documentation-only (`docs/*`), while domain leads own their respective modules under immutable file locks.
 
 ## 3. Current State of the Work
-- Application is production-built, lint-clean, typecheck-clean, and tested.
-- Local dev server is ready to run via `npm run dev`.
+- Application is live and running at `http://localhost:5173/`.
+- Local dev server background process: active.
 
 ## 4. Concrete Next Steps
-1. Connect to live synthetic FHIR test servers (HAPI FHIR / Smart Health IT Sandbox).
-2. Expand CBO connector adapters to support live municipal 211 REST API endpoints.
-3. Conduct simulated provider usability evaluations on CDS Hook alert firing frequency.
+1. Add simulated webhook / WebSocket listener for automated real-time CBO status pushes.
+2. Simulate multi-patient synthetic population cohort generator (50+ Synthea patients).
+3. Connect with design partners (Medicaid MCOs / ACOs) for Phase 0 usability feedback.

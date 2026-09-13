@@ -137,7 +137,7 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
                         )}
                       </span>
                     </div>
-                    <p className="service-desc">{ticket.targetService.description}</p>
+                    <p className="service-desc">{ticket.targetService.description.split('.')[0]}.</p>
                     
                     <div className="service-steps">
                       <div className={`step-dot ${['INITIATED', 'ACCEPTED', 'SCHEDULED', 'IN_PROGRESS', 'FULFILLED'].includes(ticket.status) ? 'done' : ''}`}>
@@ -188,11 +188,12 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
               <div className="toggle-row">
                 <div>
                   <strong>Food & Meal Support</strong>
-                  <p className="text-muted text-sm">Share food insecurity need with local food pantries</p>
+                  <p className="text-muted text-sm">Local community pantry & meal delivery</p>
                 </div>
                 <button
                   className="btn-toggle"
                   onClick={() => onToggleConsent('food-insecurity', !consentRecord.scopes['food-insecurity'])}
+                  title="Toggle food consent"
                 >
                   {consentRecord.scopes['food-insecurity'] ? <ToggleRight size={28} color="#059669" /> : <ToggleLeft size={28} color="#94a3b8" />}
                 </button>
@@ -201,11 +202,12 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
               <div className="toggle-row">
                 <div>
                   <strong>Transportation Support</strong>
-                  <p className="text-muted text-sm">Share clinic ride appointments with NEMT transit drivers</p>
+                  <p className="text-muted text-sm">Clinic ride assistance & transit vouchers</p>
                 </div>
                 <button
                   className="btn-toggle"
                   onClick={() => onToggleConsent('transportation-insecurity', !consentRecord.scopes['transportation-insecurity'])}
+                  title="Toggle transportation consent"
                 >
                   {consentRecord.scopes['transportation-insecurity'] ? <ToggleRight size={28} color="#059669" /> : <ToggleLeft size={28} color="#94a3b8" />}
                 </button>
@@ -214,11 +216,12 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
               <div className="toggle-row">
                 <div>
                   <strong>Housing & Shelter Support</strong>
-                  <p className="text-muted text-sm">Share housing assistance need with eviction diversion partners</p>
+                  <p className="text-muted text-sm">Eviction diversion & safe shelter linkage</p>
                 </div>
                 <button
                   className="btn-toggle"
                   onClick={() => onToggleConsent('housing-instability', !consentRecord.scopes['housing-instability'])}
+                  title="Toggle housing consent"
                 >
                   {consentRecord.scopes['housing-instability'] ? <ToggleRight size={28} color="#059669" /> : <ToggleLeft size={28} color="#94a3b8" />}
                 </button>
@@ -227,11 +230,12 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
               <div className="toggle-row">
                 <div>
                   <strong>Senior & Peer Outreach</strong>
-                  <p className="text-muted text-sm">Allow weekly check-in calls from Community Health Workers</p>
+                  <p className="text-muted text-sm">Weekly check-in calls from care navigators</p>
                 </div>
                 <button
                   className="btn-toggle"
                   onClick={() => onToggleConsent('social-isolation', !consentRecord.scopes['social-isolation'])}
+                  title="Toggle peer outreach consent"
                 >
                   {consentRecord.scopes['social-isolation'] ? <ToggleRight size={28} color="#059669" /> : <ToggleLeft size={28} color="#94a3b8" />}
                 </button>
@@ -239,12 +243,13 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({
 
               <div className="toggle-row highlight-part2">
                 <div>
-                  <strong>Behavioral Health / Substance Use (42 CFR Part 2)</strong>
-                  <p className="text-muted text-sm">Requires strict explicit consent. Default: Blocked.</p>
+                  <strong>Specialty / Behavioral Health</strong>
+                  <p className="text-muted text-sm">Strict 42 CFR Part 2 explicit release</p>
                 </div>
                 <button
                   className="btn-toggle"
                   onClick={() => onToggleConsent('behavioral-health-part2', !consentRecord.scopes['behavioral-health-part2'])}
+                  title="Toggle behavioral health consent"
                 >
                   {consentRecord.scopes['behavioral-health-part2'] ? <ToggleRight size={28} color="#dc2626" /> : <ToggleLeft size={28} color="#94a3b8" />}
                 </button>

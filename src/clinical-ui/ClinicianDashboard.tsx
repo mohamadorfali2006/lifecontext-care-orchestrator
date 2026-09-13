@@ -17,8 +17,7 @@ import {
   ChevronRight, 
   FileText,
   Clock,
-  ShieldCheck,
-  Building2
+  ShieldCheck
 } from 'lucide-react';
 
 interface ClinicianDashboardProps {
@@ -30,8 +29,6 @@ interface ClinicianDashboardProps {
   availableServices: HsdsService[];
   activeReferrals: ReferralTicket[];
   onOrderReferral: (domain: SdohDomain, targetService: HsdsService) => void;
-  onOpenCboPortal: () => void;
-  onOpenPatientPortal: () => void;
   fhirServerName?: string;
   isLiveFhir?: boolean;
   onSyncLiveFhir?: () => void;
@@ -47,8 +44,6 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
   availableServices,
   activeReferrals,
   onOrderReferral,
-  onOpenCboPortal,
-  onOpenPatientPortal,
   fhirServerName,
   isLiveFhir,
   onSyncLiveFhir,
@@ -80,8 +75,8 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
       {cdsCards.length > 0 && (
         <section className="cds-alerts-container">
           <div className="section-label">
-            <Sparkles size={16} color="#d97706" />
-            <span>Active CDS Hook Recommendations (21st Century Cures Act Non-Device Compliant)</span>
+            <Sparkles size={15} color="#0891b2" />
+            <span>Clinical Decision Support Alert</span>
           </div>
           <div className="cds-cards-grid">
             {cdsCards.map(card => (
@@ -91,14 +86,14 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
               >
                 <div className="card-top">
                   <div className="card-badge">
-                    <AlertCircle size={16} />
+                    <AlertCircle size={15} />
                     <span>{card.indicator.toUpperCase()} PRIORITY</span>
                   </div>
                   <button 
                     className="btn-link"
                     onClick={() => setShowAttributionModal(true)}
                   >
-                    <Info size={14} /> Explain Attribution
+                    <Info size={13} /> Attribution Details
                   </button>
                 </div>
                 <h4 className="card-summary">{card.summary}</h4>
@@ -131,7 +126,7 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
         <div className="col-left">
           <div className="content-box">
             <div className="box-header">
-              <h4>Identified SDOH Conditions (Gravity IG)</h4>
+              <h4>Identified SDOH Conditions</h4>
               <span className="count-pill">{activeConditions.filter(c => c.code.coding.some(cd => cd.code.startsWith('Z'))).length} Active</span>
             </div>
             <div className="sdoh-condition-list">
@@ -157,9 +152,9 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
                       </div>
                       <div className="sdoh-item-status">
                         {hasReferral ? (
-                          <span className="referral-tag green"><CheckCircle2 size={12} /> Closed-Loop Referral Active</span>
+                          <span className="referral-tag green"><CheckCircle2 size={12} /> Referral Active</span>
                         ) : (
-                          <span className="referral-tag amber"><Clock size={12} /> Needs Community Linkage</span>
+                          <span className="referral-tag amber"><Clock size={12} /> Action Needed</span>
                         )}
                         <ChevronRight size={16} />
                       </div>
@@ -186,19 +181,6 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
                   </li>
                 ))}
             </ul>
-          </div>
-
-          {/* Quick Cross-Portal Switchers */}
-          <div className="content-box quick-links-box">
-            <h4>Multi-Stakeholder Portals</h4>
-            <div className="portal-buttons">
-              <button className="btn-portal cbo" onClick={onOpenCboPortal}>
-                <Building2 size={16} /> Open CBO Partner Node
-              </button>
-              <button className="btn-portal patient" onClick={onOpenPatientPortal}>
-                <HeartHandshake size={16} /> View Patient & Caregiver PWA
-              </button>
-            </div>
           </div>
         </div>
 
