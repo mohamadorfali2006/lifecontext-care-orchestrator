@@ -32,6 +32,10 @@ interface ClinicianDashboardProps {
   onOrderReferral: (domain: SdohDomain, targetService: HsdsService) => void;
   onOpenCboPortal: () => void;
   onOpenPatientPortal: () => void;
+  fhirServerName?: string;
+  isLiveFhir?: boolean;
+  onSyncLiveFhir?: () => void;
+  isLoadingLiveFhir?: boolean;
 }
 
 export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
@@ -44,7 +48,11 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
   activeReferrals,
   onOrderReferral,
   onOpenCboPortal,
-  onOpenPatientPortal
+  onOpenPatientPortal,
+  fhirServerName,
+  isLiveFhir,
+  onSyncLiveFhir,
+  isLoadingLiveFhir
 }) => {
   const [selectedDomain, setSelectedDomain] = useState<SdohDomain>('food-insecurity');
   const [showAttributionModal, setShowAttributionModal] = useState(false);
@@ -62,6 +70,10 @@ export const ClinicianDashboard: React.FC<ClinicianDashboardProps> = ({
         insurancePlan={insurancePlan}
         riskScore={riskResult.totalScore}
         riskTier={riskResult.riskTier}
+        fhirServerName={fhirServerName}
+        isLiveFhir={isLiveFhir}
+        onSyncLiveFhir={onSyncLiveFhir}
+        isLoadingLiveFhir={isLoadingLiveFhir}
       />
 
       {/* CDS Hooks Non-Disruptive Alert Cards */}

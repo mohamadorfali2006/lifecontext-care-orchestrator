@@ -7,13 +7,21 @@ interface SmartFhirHeaderProps {
   insurancePlan: string;
   riskScore: number;
   riskTier: 'Low' | 'Moderate' | 'High' | 'Critical';
+  fhirServerName?: string;
+  isLiveFhir?: boolean;
+  onSyncLiveFhir?: () => void;
+  isLoadingLiveFhir?: boolean;
 }
 
 export const SmartFhirHeader: React.FC<SmartFhirHeaderProps> = ({
   patient,
   insurancePlan,
   riskScore,
-  riskTier
+  riskTier,
+  fhirServerName = 'SMART Health IT R4 Sandbox',
+  isLiveFhir = false,
+  onSyncLiveFhir,
+  isLoadingLiveFhir = false
 }) => {
   const patientName = `${patient.name[0]?.given?.join(' ') || ''} ${patient.name[0]?.family || ''}`.trim();
   const address = patient.address?.[0];
@@ -60,8 +68,17 @@ export const SmartFhirHeader: React.FC<SmartFhirHeaderProps> = ({
           </div>
           <div className="stat-card secure-badge">
             <ShieldCheck size={16} color="#059669" />
-            <span className="secure-text">SMART v2.0 OAuth Session Active</span>
+            <span className="secure-text">{isLiveFhir ? `Connected: ${fhirServerName}` : 'SMART v2.0 OAuth Session Active'}</span>
           </div>
+          {onSyncLiveFhir && (
+            <button 
+              className="btn-sync-fhir" 
+              onClick={onSyncLiveFhir}
+              disabled={isLoadingLiveFhir}
+            >
+              {isLoadingLiveFhir ? 'Connecting...' : '⚡ Test Live SMART Sandbox'}
+            </button>
+          )}
         </div>
       </div>
     </header>

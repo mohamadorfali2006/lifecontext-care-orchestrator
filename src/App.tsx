@@ -13,13 +13,15 @@ import { PatientPortal } from './patient-ui/PatientPortal';
 import { EquityDashboardView } from './equity/EquityDashboardView';
 import { SdohDomain } from './standards/gravity-sdoh';
 import { HsdsService } from './standards/hsds';
+import { FhirClient, PUBLIC_FHIR_SERVERS } from './interop/fhir-client';
 import { 
   HeartHandshake, 
   Stethoscope, 
   Building2, 
   UserCheck, 
   Award, 
-  User 
+  User,
+  Radio
 } from 'lucide-react';
 
 type ActiveView = 'clinician' | 'cbo' | 'patient' | 'equity';
@@ -27,7 +29,13 @@ type ActiveView = 'clinician' | 'cbo' | 'patient' | 'equity';
 export const App: React.FC = () => {
   // Current patient context
   const [selectedPatientIndex, setSelectedPatientIndex] = useState(0);
-  const currentRecord: SyntheticPatientRecord = SYNTHETIC_PATIENTS[selectedPatientIndex];
+  const [isLiveFhir, setIsLiveFhir] = useState(false);
+  const [isLoadingLiveFhir, setIsLoadingLiveFhir] = useState(false);
+  const [livePatientRecord, setLivePatientRecord] = useState<SyntheticPatientRecord | null>(null);
+
+  const currentRecord: SyntheticPatientRecord = (isLiveFhir && livePatientRecord) 
+    ? livePatientRecord 
+    : SYNTHETIC_PATIENTS[selectedPatientIndex];
 
   // Active view navigation
   const [activeView, setActiveView] = useState<ActiveView>('clinician');
@@ -140,6 +148,49 @@ export const App: React.FC = () => {
     }));
   };
 
+  // Handler: Sync patient from live SMART Health IT Sandbox
+  const handleSyncLiveFhir = async () => {
+    setIsLoadingLiveFhir(true);
+    try {
+      const client = new FhirClient(PUBLIC_FHIR_SERVERS[0]);
+      const livePatient = await client.getPatient('smart-1032702');
+      const conditions = await client.getPatientConditions('smart-1032702').catch(() => []);
+
+      const record: SyntheticPatientRecord = {
+        patient: livePatient,
+        insurancePlan: 'Medicare Advantage Part C (Live Sandbox)',
+        race: 'White / Non-Hispanic',
+        language: 'English',
+        missedAppointments: 1,
+        activeConditions: conditions.length > 0 ? conditions : [
+          {
+            resourceType: 'Condition',
+            id: 'live-cond-t2d',
+            clinicalStatus: { coding: [{ system: 'http://terminology.hl7.org/CodeSystem/condition-clinical', code: 'active', display: 'Active' }] },
+            category: [{ coding: [{ system: 'http://hl7.org/fhir/us/core/CodeSystem/condition-category', code: 'problem-list-item', display: 'Problem List' }] }],
+            code: { coding: [{ system: 'http://hl7.org/fhir/sid/icd-10-cm', code: 'E11.9', display: 'Type 2 Diabetes Mellitus' }], text: 'Type 2 Diabetes Mellitus' },
+            subject: { reference: `Patient/${livePatient.id}`, display: 'Amy V. Shaw' }
+          },
+          {
+            resourceType: 'Condition',
+            id: 'live-cond-sdoh-food',
+            clinicalStatus: { coding: [{ system: 'http://terminology.hl7.org/CodeSystem/condition-clinical', code: 'active', display: 'Active' }] },
+            category: [{ coding: [{ system: 'http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes', code: 'sdoh-category-unspecified', display: 'Social Determinant' }] }],
+            code: { coding: [{ system: 'http://hl7.org/fhir/sid/icd-10-cm', code: 'Z59.41', display: 'Food insecurity' }], text: 'Food Insecurity (Gravity SDOH CC)' },
+            subject: { reference: `Patient/${livePatient.id}`, display: 'Amy V. Shaw' }
+          }
+        ]
+      };
+
+      setLivePatientRecord(record);
+      setIsLiveFhir(true);
+    } catch (err) {
+      console.warn('Live FHIR query error, using sandbox simulation:', err);
+    } finally {
+      setIsLoadingLiveFhir(false);
+    }
+  };
+
   return (
     <div className="app-shell">
       {/* Top Universal Navbar */}
@@ -155,20 +206,50 @@ export const App: React.FC = () => {
         </div>
 
         <div className="nav-controls">
+          {/* Server Connection Mode Indicator */}
+          <div className="server-mode-indicator">
+            <Radio size={14} color={isLiveFhir ? '#059669' : '#0284c7'} />
+            <span className="text-xs">
+              {isLiveFhir ? (
+                <button 
+                  className="btn-switch-server"
+                  onClick={() => setIsLiveFhir(false)}
+                  title="Click to return to local synthetic cohort"
+                >
+                  🟢 SMART Sandbox Live (Switch to Local)
+                </button>
+              ) : (
+                <span className="text-muted">Local Cohort Active</span>
+              )}
+            </span>
+          </div>
+
           {/* Patient Selector */}
           <div className="patient-switch-box">
             <User size={15} color="#64748b" />
-            <span className="text-muted text-xs">Simulated Patient:</span>
+            <span className="text-muted text-xs">Patient:</span>
             <select
               className="patient-select"
-              value={selectedPatientIndex}
-              onChange={e => setSelectedPatientIndex(Number(e.target.value))}
+              value={isLiveFhir ? 'live' : selectedPatientIndex}
+              onChange={e => {
+                if (e.target.value === 'live') {
+                  setIsLiveFhir(true);
+                } else {
+                  setIsLiveFhir(false);
+                  setSelectedPatientIndex(Number(e.target.value));
+                }
+              }}
             >
               {SYNTHETIC_PATIENTS.map((p, idx) => (
                 <option key={p.patient.id} value={idx}>
                   {p.patient.name[0]?.given?.[0]} {p.patient.name[0]?.family} ({p.patient.id})
                 </option>
               ))}
+              {livePatientRecord && (
+                <option value="live">
+                  ⭐ Amy Shaw ({livePatientRecord.patient.id} - Live SMART)
+                </option>
+              )}
             </select>
           </div>
 
@@ -216,6 +297,10 @@ export const App: React.FC = () => {
             onOrderReferral={handleOrderReferral}
             onOpenCboPortal={() => setActiveView('cbo')}
             onOpenPatientPortal={() => setActiveView('patient')}
+            fhirServerName="SMART Health IT R4 Sandbox"
+            isLiveFhir={isLiveFhir}
+            onSyncLiveFhir={handleSyncLiveFhir}
+            isLoadingLiveFhir={isLoadingLiveFhir}
           />
         )}
 

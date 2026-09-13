@@ -171,3 +171,13 @@ export interface Provenance {
     who: Reference;
   }>;
 }
+
+export interface Bundle<T = any> {
+  resourceType: 'Bundle';
+  type: 'searchset' | 'transaction' | 'batch' | 'collection';
+  total?: number;
+  entry?: Array<{
+    fullUrl?: string;
+    resource: T;
+  }>;
+}

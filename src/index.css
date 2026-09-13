@@ -1489,3 +1489,46 @@ body {
   background: var(--warning-light);
   color: var(--warning);
 }
+
+.server-mode-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--slate-100);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+}
+
+.btn-switch-server {
+  border: none;
+  background: none;
+  font-weight: 700;
+  color: var(--success);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.75rem;
+}
+
+.btn-sync-fhir {
+  background: var(--purple);
+  color: #ffffff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-sync-fhir:hover {
+  background: #6d28d9;
+}
+
+.btn-sync-fhir:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
