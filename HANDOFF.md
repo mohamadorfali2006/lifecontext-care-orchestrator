@@ -37,7 +37,8 @@
 
 ## 3. Current State of the Work
 - **Public GitHub Repository**: Live at [https://github.com/mohamadorfali2006/lifecontext-care-orchestrator](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator).
-- **CI Pipeline**: [LifeContext CI Workflow](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml).
+- **Live Production Deployment**: Running at [https://mohamadorfali2006.github.io/lifecontext-care-orchestrator/](https://mohamadorfali2006.github.io/lifecontext-care-orchestrator/).
+- **CI/CD Pipelines**: Automated [CI Testing Workflow](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml) and [CD Deployment Workflow](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/deploy-pages.yml).
 - **Local Dev Server**: Live and active at `http://localhost:5173/`.
 - **Git Branch**: `master` up to date with `origin/master`.
 
