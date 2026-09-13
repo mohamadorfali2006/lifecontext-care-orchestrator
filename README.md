@@ -47,6 +47,20 @@
 
 ---
 
+## 🔬 Scientific Architecture & Closed-Loop Conceptual Flow
+
+<div align="center">
+  <img src="media/scientific_architecture_figure.png" alt="LifeContext OS Scientific Architecture and Conceptual Flow Diagram" width="100%" style="border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);" />
+</div>
+
+> **Figure 1 \| Systemic Interoperability & Closed-Loop SDOH Orchestration Architecture.** 
+> **(a)** *Clinical Detection & Ingestion*: Native SMART on FHIR R4 contextual hooks in the clinician electronic health record (EHR) capture PRAPARE/AHC-HRSN screening responses and map them directly into standardized LOINC instruments and billable ICD-10 Z-codes (`Z59.41`, `Z59.82`, `Z59.01`). 
+> **(b)** *Deterministic Risk Engine & 21st Century Cures Act § 3060(a) Feature Attribution*: Compound risk scoring with explicit feature weights, clinical guideline citations, and transparent clinician override logic. 
+> **(c)** *Bi-Directional Closed-Loop State Machine*: Integration with Community-Based Organizations (CBOs) through Open Referral HSDS 3.0, enforcing an auditable four-stage lifecycle (`Dispatched` ➔ `Accepted` [&lt;24h SLA] ➔ `Scheduled` ➔ `Fulfilled`) with bi-directional EHR updates. 
+> **(d)** *Patient Privacy Ledger & Continuous Algorithmic Parity Monitor*: Granular consent ledger enforcing 42 CFR Part 2 behavioral redaction and simulated SMS fallback, coupled with real-time parity index auditing across demographic cohorts to guarantee compliance with the EEOC 4/5ths rule ($\ge 80\%$ parity threshold).
+
+---
+
 ## 💡 The Core Concept: Eliminating the "Referral Black Hole"
 
 ### The Problem in Traditional Healthcare
