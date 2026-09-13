@@ -20,11 +20,15 @@
   - **CBO Partner Portal**: Designed an interactive 4-stage lifecycle progress stepper (`Dispatched` ➔ `Accepted` ➔ `Scheduled` ➔ `Fulfilled`), compact 2-column capacity cards with visual progress bars, and one-click progression buttons.
   - **Patient & Caregiver PWA**: Added a horizontal 4-step delivery progress stepper, clean category consent switches, and a simulated mobile SMS frame.
   - **Health Equity & Parity Monitor**: Replaced raw tables with visual parity progress bars, an 80% federal threshold marker, and visual KPI metric cards.
+- **Automated GitHub Actions CI Pipeline:**
+  - Added `.github/workflows/ci.yml` running TypeScript strict typecheck, OxLint static analysis, Vitest test suites, and Vite production build on every push and PR.
+  - Added live CI build status badge to `README.md`.
 - **Verification & DONE Bar Status:**
   - `npm run typecheck`: 0 errors.
   - `npm run lint`: 0 warnings, 0 errors across 38 files.
   - `npm test`: 16/16 tests passing across 6 test suites.
   - `npm run build`: Production bundle generated cleanly in `dist/`.
+  - GitHub Actions CI run: active on GitHub.
 
 ## 2. Key Decisions & Rationale
 - **Visual Over Text Density:** Prioritized graphical pipelines, progress bars, and badges over walls of text and raw JSON blocks to reduce cognitive load for clinicians, CBO intake workers, and patients.
@@ -32,11 +36,12 @@
 - **Embedded Motion Assets:** Converted browser sessions into optimized `.webp` animations stored in `media/` so the GitHub repository renders interactive animations natively on any device.
 
 ## 3. Current State of the Work
-- **Public GitHub Repository**: Live at `https://github.com/mohamadorfali2006/lifecontext-care-orchestrator`.
+- **Public GitHub Repository**: Live at [https://github.com/mohamadorfali2006/lifecontext-care-orchestrator](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator).
+- **CI Pipeline**: [LifeContext CI Workflow](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml).
 - **Local Dev Server**: Live and active at `http://localhost:5173/`.
 - **Git Branch**: `master` up to date with `origin/master`.
 
 ## 4. Concrete Next Steps
-1. Configure automated GitHub Actions CI workflow to run typecheck, lint, and vitest on every pull request.
-2. Deploy a live staging environment on Vercel or Cloudflare Pages linked to the GitHub repository.
-3. Integrate live WebSocket notifications for real-time bidirectional status push updates between CBO nodes and the clinician EHR.
+1. Deploy a live staging environment on Vercel or Cloudflare Pages linked to the GitHub repository.
+2. Integrate live WebSocket notifications for real-time bidirectional status push updates between CBO nodes and the clinician EHR.
+3. Simulate multi-patient synthetic population cohort generator (50+ Synthea patients).
