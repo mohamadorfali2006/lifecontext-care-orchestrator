@@ -8,8 +8,7 @@
   - Created an executive-grade `README.md` featuring:
     - Interactive header badges (FHIR R4, Gravity SDOH, HSDS 3.0, Cures Act, 42 CFR Part 2, React 19, TypeScript, Live Demo, Vercel).
     - **Publication-Grade Nature-Style Scientific Architecture Diagram** (`media/scientific_architecture_figure.png`) with rigorous 4-panel editorial annotations.
-    - **Embedded Advertising Motion Graphics Animation** (`media/lifecontext-hero-motion.webp`).
-    - **Embedded Full Journey End-to-End Motion Video** (`media/lifecontext-full-journey.webp`).
+    - **Prominently Featured Full Journey End-to-End Motion Showcase** (`media/lifecontext-full-journey.webp`) as the primary central visual representation of the platform.
     - Deep-dive problem statement: "The Referral Black Hole" in traditional healthcare and how LifeContext OS solves it.
     - Gallery of high-resolution screenshots for all 6 stakeholder surfaces.
     - Complete repository map detailing modules, design tokens, and interoperability standards.

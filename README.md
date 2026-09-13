@@ -27,22 +27,14 @@
 
 ---
 
-## 🎬 Platform Overview & Motion Graphics Showcase
-
-### Advertising Motion Graphics Animation
-> Dynamic real-time preview of the LifeContext OS care loop, showing automated clinical detection, community dispatch, and closed-loop fulfillment without clinician tab-switching:
+## 🎬 Platform Live Walkthrough & End-to-End Motion Showcase
 
 <div align="center">
-  <img src="media/lifecontext-hero-motion.webp" alt="LifeContext OS Advertising Motion Graphics" width="95%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(8, 145, 178, 0.15);" />
-</div>
-
-<br />
-
-### Full Journey End-to-End Motion Demo
-> Complete walkthrough across all stakeholder surfaces: Landing Page ➔ Dynamic 3D DNA Helix Login ➔ Clinician EHR Chart ➔ CBO Network Coordination Node ➔ Multilingual Patient & Caregiver PWA ➔ Health Equity & Parity Monitor:
-
-<div align="center">
-  <img src="media/lifecontext-full-journey.webp" alt="LifeContext OS End-to-End User Experience" width="95%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);" />
+  <img src="media/lifecontext-full-journey.webp" alt="LifeContext OS Complete End-to-End Platform Experience" width="100%" style="border-radius: 12px; border: 1px solid rgba(8, 145, 178, 0.25); box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12), 0 0 20px rgba(8, 145, 178, 0.08);" />
+  
+  <p align="center">
+    <em>Complete live walkthrough across all stakeholder surfaces: Animated Landing Page ➔ Dynamic 3D DNA Helix Login ➔ Clinician EHR Workspace ➔ CBO Network Coordination Node ➔ Multilingual Patient & Caregiver PWA ➔ Continuous Health Equity & Parity Monitor.</em>
+  </p>
 </div>
 
 ---
@@ -166,9 +158,9 @@ lifecontext-care-orchestrator/
 │   ├── 03-SECURITY-PRIVACY.md        # HIPAA, 42 CFR Part 2, Cures Act compliance
 │   ├── 04-API-CONTRACTS.md           # FHIR R4 & Open Referral HSDS schemas
 │   └── 07-HOW-TO-RUN.md              # Setup and operations guide
-├── media/                            # High-resolution screenshots and motion graphics
-│   ├── lifecontext-hero-motion.webp  # Advertising-style motion animation
-│   ├── lifecontext-full-journey.webp # Full journey walkthrough animation
+├── media/                            # High-resolution screenshots, architecture figures & motion demo
+│   ├── lifecontext-full-journey.webp # Primary end-to-end platform motion demo
+│   ├── scientific_architecture_figure.png # Nature-style 4-panel architecture diagram
 │   ├── landing_page.png              # Landing page screenshot
 │   ├── login_page.png                # 3D DNA helix login screenshot
 │   ├── clinician_dashboard.png       # Clinician EHR workspace screenshot
