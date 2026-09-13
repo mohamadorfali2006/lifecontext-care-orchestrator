@@ -11,10 +11,17 @@
 [![React 19](https://img.shields.io/badge/React-19.2-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tests](https://img.shields.io/badge/Tests-16%2F16_Passing-emerald?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![LifeContext CI](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml)
+[![Live Cloud Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-22c55e?style=for-the-badge&logo=githubpages&logoColor=white)](https://mohamadorfali2006.github.io/lifecontext-care-orchestrator/)
+
+<br />
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmohamadorfali2006%2Flifecontext-care-orchestrator)
 
 <br />
 
 **An enterprise-grade, zero-friction interoperability platform that eliminates the "Referral Black Hole" by bridging EHR clinical workflows with Community-Based Organizations (CBOs) through verifiable, bi-directional closed-loop care orchestration.**
+
+**🌐 [Launch Live Production Web App](https://mohamadorfali2006.github.io/lifecontext-care-orchestrator/)**
 
 </div>
 
