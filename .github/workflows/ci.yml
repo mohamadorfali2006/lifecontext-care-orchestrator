@@ -1,0 +1,41 @@
+name: LifeContext CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, Lint, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run TypeScript Strict Typecheck
+        run: npm run typecheck
+
+      - name: Run OxLint Static Analysis
+        run: npm run lint
+
+      - name: Run Vitest Automated Test Suite
+        run: npm test
+
+      - name: Build Production Bundle
+        run: npm run build

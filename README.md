@@ -10,6 +10,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict_v5.8-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.2-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tests](https://img.shields.io/badge/Tests-16%2F16_Passing-emerald?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![LifeContext CI](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamadorfali2006/lifecontext-care-orchestrator/actions/workflows/ci.yml)
 
 <br />
 
